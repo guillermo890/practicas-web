@@ -101,18 +101,46 @@
     @endif
 </div>
 
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-bold text-gray-800 mb-2">
-                    Práctica 4
-                </h3>
-                <p class="text-gray-600 mb-4">
-                    Administración de productos.
-                </p>
-                <a href="#"
-                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entrar
-                </a>
-            </div>
+
+<div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+    <h3 class="text-lg font-bold text-gray-800 mb-2">
+        Práctica 4
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+        Administración de productos.
+    </p>
+
+    @if(Auth::user()->role->nombre == 'Administrador')
+
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ route('productos.index') }}"
+                class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                Administrar productos
+            </a>
+
+            <a href="{{ route('categorias.index') }}"
+                class="inline-block bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+                Categorías
+            </a>
+        </div>
+
+    @elseif(Auth::user()->role->nombre == 'Empleado')
+
+        <a href="{{ route('productos.index') }}"
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+            Consultar productos
+        </a>
+
+    @else
+
+        <p class="text-gray-500 text-sm">
+            No tienes acceso a esta práctica.
+        </p>
+
+    @endif
+</div>
+
 
             <div class="bg-white p-6 rounded-xl shadow">
                 <h3 class="text-lg font-bold text-gray-800 mb-2">

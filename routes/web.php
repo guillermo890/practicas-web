@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProductoController;
+
 // Página inicial: enviar al login
 Route::get('/', function () {
     return redirect()->route('login');
@@ -113,5 +116,53 @@ Route::middleware(['auth', 'rol:Alumno'])->group(function () {
 
     Route::get('/mi-informacion-academica', [AlumnoController::class, 'miInformacion'])
         ->name('alumnos.mi-informacion');
+
+});
+// Practica 4 gestion categorias 
+Route::middleware(['auth', 'rol:Administrador'])->group(function () {
+
+    Route::get('/categorias', [CategoriaController::class, 'index'])
+        ->name('categorias.index');
+
+    Route::post('/categorias', [CategoriaController::class, 'store'])
+        ->name('categorias.store');
+
+    Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy'])
+        ->name('categorias.destroy');
+
+});
+// ==========================================
+// PRACTICA 4 - ADMINISTRACION DE PRODUCTOS
+// ==========================================
+
+// Administrador y Empleado pueden consultar productos
+Route::middleware(['auth', 'rol:Administrador,Empleado'])->group(function () {
+
+    Route::get('/productos', [ProductoController::class, 'index'])
+        ->name('productos.index');
+
+    Route::get('/productos/{id}', [ProductoController::class, 'show'])
+        ->whereNumber('id')
+        ->name('productos.show');
+
+});
+
+// Solamente el Administrador puede modificar productos
+Route::middleware(['auth', 'rol:Administrador'])->group(function () {
+
+    Route::get('/productos/crear', [ProductoController::class, 'create'])
+        ->name('productos.create');
+
+    Route::post('/productos', [ProductoController::class, 'store'])
+        ->name('productos.store');
+
+    Route::get('/productos/{id}/editar', [ProductoController::class, 'edit'])
+        ->name('productos.edit');
+
+    Route::put('/productos/{id}', [ProductoController::class, 'update'])
+        ->name('productos.update');
+
+    Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])
+        ->name('productos.destroy');
 
 });
