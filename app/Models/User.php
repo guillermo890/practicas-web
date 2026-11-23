@@ -7,10 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 class User extends Authenticatable
 {
      use HasFactory, Notifiable, SoftDeletes;
-     
+
     protected $fillable = [
         'name',
         'email',
@@ -35,4 +36,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+   public function alumno(): HasOne
+{
+    return $this->hasOne(Alumno::class, 'user_id');
+}
 }

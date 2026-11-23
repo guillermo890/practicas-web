@@ -47,12 +47,12 @@ class AuthController extends Controller
 
             $codigo = random_int(100000, 999999);
 
-           session([
-           'admin_pendiente' => $usuario->id,
-            'codigo_verificacion' => Hash::make((string) $codigo),
-               'codigo_expira' => now()->addMinutes(5)->timestamp,
-                 'intentos_codigo' => 0
-                  ]);
+            session([
+                'admin_pendiente' => $usuario->id,
+                'codigo_verificacion' => Hash::make((string) $codigo),
+                'codigo_expira' => now()->addMinutes(5)->timestamp,
+                'intentos_codigo' => 0
+            ]);
 
             Mail::raw(
                 "Tu código de verificación es: $codigo. Tiene una duración de 5 minutos.",
@@ -65,8 +65,8 @@ class AuthController extends Controller
             return redirect()->route('verificar.codigo');
         }
 
-        // Inicio de sesión convencional para empleado
-        if ($usuario->role->nombre == 'Empleado') {
+        // Inicio de sesión para empleado, profesor y alumno
+        if (in_array($usuario->role->nombre, ['Empleado', 'Profesor', 'Alumno'])) {
 
             Auth::login($usuario);
             $request->session()->regenerate();
@@ -92,61 +92,71 @@ class AuthController extends Controller
     // Comprobar código de administrador
     public function verificarCodigo(Request $request)
     {
-    $request->validate([
-        'codigo' => 'required|digits:6'
-    ]);
-
-    if (!session()->has('admin_pendiente')) {
-        return redirect()->route('login');
-    }
-
-    // Comprobar intentos permitidos
-    $intentos = session('intentos_codigo', 0);
-
-    if ($intentos >= 5) {
-        session()->forget([
-            'admin_pendiente',
-            'codigo_verificacion',
-            'codigo_expira',
-            'intentos_codigo'
+        $request->validate([
+            'codigo' => 'required|digits:6'
         ]);
 
-        return redirect()->route('login')
-            ->withErrors([
-                'email' => 'Superaste los intentos permitidos. Inicia sesión nuevamente.'
+        if (!session()->has('admin_pendiente')) {
+            return redirect()->route('login');
+        }
+
+        $intentos = session('intentos_codigo', 0);
+
+        if ($intentos >= 5) {
+            session()->forget([
+                'admin_pendiente',
+                'codigo_verificacion',
+                'codigo_expira',
+                'intentos_codigo'
             ]);
-    }
 
-    // Comprobar expiración
-    if (now()->timestamp > session('codigo_expira')) {
-        session()->forget([
-            'admin_pendiente',
-            'codigo_verificacion',
-            'codigo_expira',
-            'intentos_codigo'
-        ]);
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'Superaste los intentos permitidos. Inicia sesión nuevamente.'
+                ]);
+        }
 
-        return redirect()->route('login')
-            ->withErrors([
-                'email' => 'El código expiró. Inicia sesión nuevamente.'
+        if (now()->timestamp > session('codigo_expira')) {
+            session()->forget([
+                'admin_pendiente',
+                'codigo_verificacion',
+                'codigo_expira',
+                'intentos_codigo'
             ]);
-    }
 
-    // Comprobar código
-    if (!Hash::check($request->codigo, session('codigo_verificacion'))) {
+            return redirect()->route('login')
+                ->withErrors([
+                    'email' => 'El código expiró. Inicia sesión nuevamente.'
+                ]);
+        }
 
-        session([
-            'intentos_codigo' => $intentos + 1
-        ]);
+        if (!Hash::check($request->codigo, session('codigo_verificacion'))) {
 
-        return back()->withErrors([
-            'codigo' => 'El código es incorrecto. Intentos restantes: ' . (4 - $intentos)
-        ]);
-    }
+            session([
+                'intentos_codigo' => $intentos + 1
+            ]);
 
-    $usuario = User::find(session('admin_pendiente'));
+            return back()->withErrors([
+                'codigo' => 'El código es incorrecto. Intentos restantes: ' . (4 - $intentos)
+            ]);
+        }
 
-    if (!$usuario || !$usuario->role || $usuario->role->nombre != 'Administrador') {
+        $usuario = User::find(session('admin_pendiente'));
+
+        if (!$usuario || !$usuario->role || $usuario->role->nombre != 'Administrador') {
+            session()->forget([
+                'admin_pendiente',
+                'codigo_verificacion',
+                'codigo_expira',
+                'intentos_codigo'
+            ]);
+
+            return redirect()->route('login');
+        }
+
+        Auth::login($usuario);
+        $request->session()->regenerate();
+
         session()->forget([
             'admin_pendiente',
             'codigo_verificacion',
@@ -154,22 +164,8 @@ class AuthController extends Controller
             'intentos_codigo'
         ]);
 
-        return redirect()->route('login');
+        return redirect()->route('inicio');
     }
-
-    Auth::login($usuario);
-    $request->session()->regenerate();
-
-    session()->forget([
-        'admin_pendiente',
-        'codigo_verificacion',
-        'codigo_expira',
-        'intentos_codigo'
-    ]);
-
-    return redirect()->route('inicio');
-}
-
 
     // Cerrar sesión
     public function cerrarSesion(Request $request)

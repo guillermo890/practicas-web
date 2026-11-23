@@ -68,18 +68,38 @@
             </a>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-bold text-gray-800 mb-2">
-                    Práctica 3
-                </h3>
-                <p class="text-gray-600 mb-4">
-                    Sistema de información académica.
-                </p>
-                <a href="#"
-                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entrar
-                </a>
-            </div>
+            
+<div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
+    <h3 class="text-lg font-bold text-gray-800 mb-2">
+        Práctica 3
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+        Sistema de información académica.
+    </p>
+
+    @if(Auth::user()->role->nombre == 'Profesor')
+
+        <a href="{{ route('alumnos.index') }}"
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+            Administrar alumnos
+        </a>
+
+    @elseif(Auth::user()->role->nombre == 'Alumno')
+
+        <a href="{{ route('alumnos.mi-informacion') }}"
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+            Mi información académica
+        </a>
+
+    @else
+
+        <p class="text-gray-500 text-sm">
+            No tienes acceso a esta práctica.
+        </p>
+
+    @endif
+</div>
 
             <div class="bg-white p-6 rounded-xl shadow">
                 <h3 class="text-lg font-bold text-gray-800 mb-2">

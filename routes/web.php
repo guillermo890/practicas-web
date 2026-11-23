@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\AlumnoController;
 // Página inicial: enviar al login
 Route::get('/', function () {
     return redirect()->route('login');
@@ -77,5 +78,40 @@ Route::middleware(['auth', 'rol:Administrador'])->group(function () {
 
     Route::delete('/usuarios-eliminados/{id}/eliminar', [UsuarioController::class, 'eliminarPermanente'])
         ->name('usuarios.eliminarPermanente');
+
+});
+
+
+// PRÁCTICA 3: SISTEMA ACADÉMICO
+
+// Rutas exclusivas para el profesor
+Route::middleware(['auth', 'rol:Profesor'])->group(function () {
+
+    Route::get('/alumnos', [AlumnoController::class, 'index'])
+        ->name('alumnos.index');
+
+    Route::get('/alumnos/crear', [AlumnoController::class, 'create'])
+        ->name('alumnos.create');
+
+    Route::post('/alumnos', [AlumnoController::class, 'store'])
+        ->name('alumnos.store');
+
+    Route::get('/alumnos/{id}/editar', [AlumnoController::class, 'edit'])
+        ->name('alumnos.edit');
+
+    Route::put('/alumnos/{id}', [AlumnoController::class, 'update'])
+        ->name('alumnos.update');
+
+    Route::delete('/alumnos/{id}', [AlumnoController::class, 'destroy'])
+        ->name('alumnos.destroy');
+
+});
+
+
+// Ruta exclusiva para que el alumno consulte su información
+Route::middleware(['auth', 'rol:Alumno'])->group(function () {
+
+    Route::get('/mi-informacion-academica', [AlumnoController::class, 'miInformacion'])
+        ->name('alumnos.mi-informacion');
 
 });
