@@ -54,17 +54,18 @@
                 </a>
             </div>
 
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-bold text-gray-800 mb-2">
-                    Práctica 2
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+              <h3 class="text-xl font-bold text-gray-800 mb-2">
+                Práctica 2
                 </h3>
-                <p class="text-gray-600 mb-4">
-                    Administración de usuarios y permisos.
-                </p>
-                <a href="#"
-                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entrar
-                </a>
+             <p class="text-gray-600 mb-4">
+              CRUD de usuarios con permisos según el rol.
+              </p>
+              <a href="{{ route('usuarios.index') }}"
+              class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+             Administrar usuarios
+            </a>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow">
