@@ -142,31 +142,107 @@
 </div>
 
 
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-bold text-gray-800 mb-2">
-                    Práctica 5
-                </h3>
-                <p class="text-gray-600 mb-4">
-                    Reservaciones de equipo de cómputo.
-                </p>
-                <a href="#"
-                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entrar
-                </a>
-            </div>
+     
+<div class="bg-white rounded-xl shadow-md p-6">
+    <h3 class="text-xl font-bold text-gray-800 mb-2">
+        Práctica 5: Reservaciones de equipos
+    </h3>
 
-            <div class="bg-white p-6 rounded-xl shadow">
-                <h3 class="text-lg font-bold text-gray-800 mb-2">
-                    Práctica 6
-                </h3>
-                <p class="text-gray-600 mb-4">
-                    Juego de tres en raya.
-                </p>
-                <a href="#"
-                    class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entrar
-                </a>
-            </div>
+    <p class="text-gray-600 mb-4">
+        Sistema para administrar equipos de cómputo y realizar reservaciones.
+    </p>
+
+    @if(auth()->user()->role->nombre == 'Administrador')
+
+        <div class="flex flex-col gap-2">
+            <a href="{{ route('equipos.index') }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg">
+                Administrar equipos
+            </a>
+
+            <a href="{{ route('reservaciones.index') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white text-center px-4 py-2 rounded-lg">
+                Ver todas las reservaciones
+            </a>
+        </div>
+
+    @elseif(auth()->user()->role->nombre == 'Estudiante')
+
+        <div class="flex flex-col gap-2">
+            <a href="{{ route('reservaciones.disponibles') }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg">
+                Ver equipos disponibles
+            </a>
+
+            <a href="{{ route('reservaciones.mis') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white text-center px-4 py-2 rounded-lg">
+                Mis reservaciones
+            </a>
+        </div>
+
+    @else
+
+        <p class="text-gray-500">
+            No tienes permisos para acceder a esta práctica.
+        </p>
+
+    @endif
+</div>
+
+
+
+<div class="bg-white rounded-xl shadow-md p-6">
+
+    <h3 class="text-xl font-bold text-gray-800 mb-2">
+        Práctica 6: Juego del gato
+    </h3>
+
+    <p class="text-gray-600 mb-4">
+        Sistema multijugador de Tic-Tac-Toe con sesiones independientes.
+    </p>
+
+    @if(auth()->user()->role->nombre == 'Administrador')
+
+        <div class="flex flex-col gap-2">
+
+            <a href="{{ route('partidas.admin.usuarios') }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg">
+                Consultar usuarios
+            </a>
+
+            <a href="{{ route('partidas.admin.partidas') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white text-center px-4 py-2 rounded-lg">
+                Consultar todas las partidas
+            </a>
+
+        </div>
+
+    @elseif(auth()->user()->role->nombre == 'Jugador')
+
+        <div class="flex flex-col gap-2">
+
+            <a href="{{ route('partidas.index') }}"
+               class="bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded-lg">
+                Jugar
+            </a>
+
+            <a href="{{ route('partidas.historial') }}"
+               class="bg-gray-700 hover:bg-gray-800 text-white text-center px-4 py-2 rounded-lg">
+                Mi historial
+            </a>
+
+        </div>
+
+    @else
+
+        <p class="text-gray-500">
+            No tienes permisos para acceder a esta práctica.
+        </p>
+
+    @endif
+
+</div>
+
 
         </div>
 

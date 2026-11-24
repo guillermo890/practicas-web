@@ -8,6 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Partida;
+
+
 class User extends Authenticatable
 {
      use HasFactory, Notifiable, SoftDeletes;
@@ -39,5 +43,24 @@ class User extends Authenticatable
    public function alumno(): HasOne
 {
     return $this->hasOne(Alumno::class, 'user_id');
+}
+public function reservaciones(): HasMany
+{
+    return $this->hasMany(Reservacion::class, 'user_id');
+}
+
+public function partidasCreadas(): HasMany
+{
+    return $this->hasMany(Partida::class, 'jugador1_id');
+}
+
+public function partidasUnidas(): HasMany
+{
+    return $this->hasMany(Partida::class, 'jugador2_id');
+}
+
+public function partidasGanadas(): HasMany
+{
+    return $this->hasMany(Partida::class, 'ganador_id');
 }
 }

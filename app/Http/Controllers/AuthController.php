@@ -66,7 +66,7 @@ class AuthController extends Controller
         }
 
         // Inicio de sesión para empleado, profesor y alumno
-        if (in_array($usuario->role->nombre, ['Empleado', 'Profesor', 'Alumno'])) {
+           if (in_array($usuario->role->nombre, ['Empleado', 'Profesor', 'Alumno', 'Estudiante', 'Jugador'])) {
 
             Auth::login($usuario);
             $request->session()->regenerate();

@@ -6,6 +6,9 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\ReservacionController;
+use App\Http\Controllers\PartidaController;
 
 // Página inicial: enviar al login
 Route::get('/', function () {
@@ -164,5 +167,93 @@ Route::middleware(['auth', 'rol:Administrador'])->group(function () {
 
     Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])
         ->name('productos.destroy');
+});
 
+// PRACTICA 5: ADMINISTRACION DE EQUIPOS
+Route::middleware(['auth', 'rol:Administrador'])->group(function () {
+
+    Route::get('/equipos', [EquipoController::class, 'index'])
+        ->name('equipos.index');
+
+    Route::get('/equipos/crear', [EquipoController::class, 'create'])
+        ->name('equipos.create');
+
+    Route::post('/equipos', [EquipoController::class, 'store'])
+        ->name('equipos.store');
+
+    Route::get('/equipos/{id}/editar', [EquipoController::class, 'edit'])
+        ->name('equipos.edit');
+
+    Route::put('/equipos/{id}', [EquipoController::class, 'update'])
+        ->name('equipos.update');
+
+    Route::delete('/equipos/{id}', [EquipoController::class, 'destroy'])
+        ->name('equipos.destroy');
+
+    Route::get('/reservaciones', [ReservacionController::class, 'index'])
+        ->name('reservaciones.index');
+
+    Route::put('/reservaciones/{id}/cancelar', [ReservacionController::class, 'cancelarAdmin'])
+    ->name('reservaciones.cancelarAdmin');
+});
+
+// PRACTICA 5: RESERVACIONES DE ESTUDIANTES
+Route::middleware(['auth', 'rol:Estudiante'])->group(function () {
+
+    Route::get('/equipos-disponibles', [ReservacionController::class, 'disponibles'])
+        ->name('reservaciones.disponibles');
+
+    Route::get('/reservar/{id}', [ReservacionController::class, 'create'])
+        ->name('reservaciones.create');
+
+    Route::post('/reservaciones', [ReservacionController::class, 'store'])
+        ->name('reservaciones.store');
+
+    Route::get('/mis-reservaciones', [ReservacionController::class, 'misReservaciones'])
+        ->name('reservaciones.mis');
+
+    Route::put('/mis-reservaciones/{id}/cancelar', [ReservacionController::class, 'cancelar'])
+        ->name('reservaciones.cancelar');
+});
+
+
+// PRÁCTICA 6: JUEGO DEL GATO
+
+Route::middleware(['auth', 'rol:Jugador'])->group(function () {
+
+    Route::get('/partidas', [PartidaController::class, 'index'])
+        ->name('partidas.index');
+
+    Route::post('/partidas/crear', [PartidaController::class, 'crear'])
+        ->name('partidas.crear');
+
+    Route::post('/partidas/{id}/unirse', [PartidaController::class, 'unirse'])
+        ->name('partidas.unirse');
+
+    Route::get('/partidas/{id}/jugar', [PartidaController::class, 'jugar'])
+        ->name('partidas.jugar');
+
+    Route::post('/partidas/{id}/movimiento', [PartidaController::class, 'movimiento'])
+        ->name('partidas.movimiento');
+
+    Route::post('/partidas/{id}/abandonar', [PartidaController::class, 'abandonar'])
+        ->name('partidas.abandonar');
+
+    Route::get('/mi-historial', [PartidaController::class, 'historial'])
+        ->name('partidas.historial');
+
+    Route::get('/partidas/{id}/actualizar', [PartidaController::class, 'actualizar'])
+    ->name('partidas.actualizar');
+});
+
+Route::middleware(['auth', 'rol:Administrador'])->group(function () {
+
+    Route::get('/administracion/usuarios', [PartidaController::class, 'usuarios'])
+        ->name('partidas.admin.usuarios');
+
+    Route::get('/administracion/partidas', [PartidaController::class, 'todasLasPartidas'])
+        ->name('partidas.admin.partidas');
+
+    Route::put('/administracion/partidas/{id}/cancelar', [PartidaController::class, 'cancelarAdmin'])
+        ->name('partidas.admin.cancelar');
 });
