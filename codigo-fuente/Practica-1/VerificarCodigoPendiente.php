@@ -10,6 +10,7 @@ class VerificarCodigoPendiente
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Comprueba que existan los datos necesarios para verificar al administrador
         if (
             !session()->has('admin_pendiente') ||
             !session()->has('codigo_verificacion') ||
@@ -18,6 +19,7 @@ class VerificarCodigoPendiente
             return redirect()->route('login');
         }
 
+        // Comprueba si el código de verificación ya expiró
         if (now()->timestamp > session('codigo_expira')) {
             session()->forget([
                 'admin_pendiente',
@@ -31,6 +33,7 @@ class VerificarCodigoPendiente
                 ]);
         }
 
+        // Si la verificación sigue vigente, permite continuar
         return $next($request);
     }
 }

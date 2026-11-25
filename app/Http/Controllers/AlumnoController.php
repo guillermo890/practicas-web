@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Alumno;
-
+//Obtener equivalencias de calificacion
 class AlumnoController extends Controller
 {
     private function obtenerEquivalencia($calificacion)

@@ -32,6 +32,7 @@
                 </div>
             @endif
 
+            <!-- Envía los datos al método store del controlador -->
             <form action="{{ route('usuarios.store') }}" method="POST">
                 @csrf
 
@@ -82,6 +83,7 @@
 
                         <option value="">Selecciona un rol</option>
 
+                        <!-- Muestra los roles permitidos según el usuario actual -->
                         @foreach($roles as $rol)
                             @if(auth()->user()->role->nombre == 'Administrador' || $rol->nombre == 'Empleado')
                                 <option value="{{ $rol->id }}"

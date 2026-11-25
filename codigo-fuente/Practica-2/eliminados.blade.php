@@ -72,6 +72,7 @@
                                 <td class="p-3">
                                     <div class="flex gap-2">
 
+                                        <!-- Envía la solicitud para recuperar al usuario -->
                                         <form action="{{ route('usuarios.restaurar', $usuario->id) }}"
                                             method="POST">
                                             @csrf
@@ -82,6 +83,7 @@
                                             </button>
                                         </form>
 
+                                        <!-- Envía la solicitud para eliminarlo definitivamente -->
                                         <form action="{{ route('usuarios.eliminarPermanente', $usuario->id) }}"
                                             method="POST"
                                             onsubmit="return confirm('¿Eliminar permanentemente este usuario? Esta acción no se puede deshacer.')">

@@ -22,16 +22,19 @@ class Partida extends Model
         'tablero' => 'array'
     ];
 
+    // Relación con el primer jugador.
     public function jugador1(): BelongsTo
     {
         return $this->belongsTo(User::class, 'jugador1_id');
     }
 
+    // Relación con el segundo jugador.
     public function jugador2(): BelongsTo
     {
         return $this->belongsTo(User::class, 'jugador2_id');
     }
 
+    // Relación con el ganador.
     public function ganador(): BelongsTo
     {
         return $this->belongsTo(User::class, 'ganador_id');

@@ -8,6 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Agrega la llave foránea que relaciona usuarios con roles
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('role_id')
                 ->nullable()
@@ -15,6 +16,7 @@ return new class extends Migration
         });
     }
 
+    // Revierte los cambios de esta migración
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {

@@ -18,6 +18,7 @@
             Inicia sesión para continuar
         </p>
 
+        <!-- Muestra los errores que devuelve Laravel -->
         @if ($errors->any())
             <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
                 @foreach ($errors->all() as $error)
@@ -26,6 +27,7 @@
             </div>
         @endif
 
+        <!-- Envía los datos al controlador para iniciar sesión -->
         <form action="{{ route('login.post') }}" method="POST">
             @csrf
 

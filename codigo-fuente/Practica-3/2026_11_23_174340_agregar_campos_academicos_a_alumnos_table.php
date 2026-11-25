@@ -14,6 +14,8 @@ return new class extends Migration
             $table->integer('faltas')->default(0);
             $table->decimal('calificacion', 5, 2);
             $table->string('equivalencia');
+
+            // Relaciona el registro académico con la tabla users.
             $table->foreignId('user_id')->nullable()
                 ->constrained('users')
                 ->nullOnDelete();

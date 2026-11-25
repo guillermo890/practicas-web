@@ -60,6 +60,7 @@
                 </thead>
 
                 <tbody>
+                    <!-- Recorre los usuarios recibidos desde el controlador -->
                     @forelse($usuarios as $usuario)
                         <tr class="border-b hover:bg-gray-50">
 
@@ -83,6 +84,7 @@
                                         Editar
                                     </a>
 
+                                    <!-- Solo el administrador puede eliminar usuarios -->
                                     @if(auth()->user()->role->nombre == 'Administrador')
                                         <form action="{{ route('usuarios.destroy', $usuario->id) }}"
                                             method="POST"
@@ -116,6 +118,7 @@
             {{ $usuarios->links() }}
         </div>
 
+        <!-- El administrador puede consultar los usuarios eliminados -->
         @if(auth()->user()->role->nombre == 'Administrador')
             <div class="mt-6">
                 <a href="{{ route('usuarios.eliminados') }}"

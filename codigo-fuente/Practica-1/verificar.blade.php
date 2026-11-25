@@ -18,6 +18,7 @@
             Ingresa el código de seis dígitos enviado a tu correo.
         </p>
 
+        <!-- Muestra los errores de la verificación -->
         @if ($errors->any())
             <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
                 @foreach ($errors->all() as $error)
@@ -26,6 +27,7 @@
             </div>
         @endif
 
+        <!-- Envía el código al método que lo comprueba -->
         <form action="{{ route('verificar.codigo.post') }}" method="POST">
             @csrf
 

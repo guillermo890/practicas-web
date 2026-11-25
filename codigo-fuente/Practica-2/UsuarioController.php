@@ -9,13 +9,13 @@ use App\Models\Role;
 
 class UsuarioController extends Controller
 {
-    // Comprobar si el usuario es administrador
+    // Comprueba si el usuario que inició sesión es administrador
     private function esAdministrador()
     {
         return auth()->user()->role->nombre == 'Administrador';
     }
 
-    // Mostrar usuarios
+    // Mostrar la lista de usuarios
     public function index()
     {
         $usuarios = User::with('role')->latest()->paginate(10);
@@ -23,7 +23,7 @@ class UsuarioController extends Controller
         return view('practica2.usuarios.index', compact('usuarios'));
     }
 
-    // Mostrar formulario de registro
+    // Mostrar formulario para registrar usuarios
     public function create()
     {
         $roles = Role::all();
@@ -31,7 +31,7 @@ class UsuarioController extends Controller
         return view('practica2.usuarios.create', compact('roles'));
     }
 
-    // Guardar usuario
+    // Guardar un nuevo usuario
     public function store(Request $request)
     {
         $request->validate([
@@ -59,13 +59,13 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario registrado correctamente.');
     }
 
-    // Mostrar información del usuario
+    // Mostrar información de un usuario
     public function show(User $usuario)
     {
         return view('practica2.usuarios.show', compact('usuario'));
     }
 
-    // Mostrar formulario de edición
+    // Mostrar formulario para editar un usuario
     public function edit(User $usuario)
     {
         $roles = Role::all();
@@ -73,7 +73,7 @@ class UsuarioController extends Controller
         return view('practica2.usuarios.edit', compact('usuario', 'roles'));
     }
 
-    // Actualizar usuario
+    // Actualizar los datos de un usuario
     public function update(Request $request, User $usuario)
     {
         $request->validate([
@@ -94,6 +94,7 @@ class UsuarioController extends Controller
         $usuario->email = $request->email;
         $usuario->role_id = $rol->id;
 
+        // Solo cambia la contraseña si se escribió una nueva
         if ($request->filled('password')) {
             $usuario->password = Hash::make($request->password);
         }
@@ -104,7 +105,7 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario actualizado correctamente.');
     }
 
-    // Eliminar temporalmente
+    // Eliminar temporalmente un usuario
     public function destroy(User $usuario)
     {
         abort_unless($this->esAdministrador(), 403);
@@ -119,7 +120,7 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario eliminado temporalmente.');
     }
 
-    // Mostrar usuarios eliminados
+    // Mostrar los usuarios que fueron eliminados
     public function eliminados()
     {
         abort_unless($this->esAdministrador(), 403);
@@ -129,7 +130,7 @@ class UsuarioController extends Controller
         return view('practica2.usuarios.eliminados', compact('usuarios'));
     }
 
-    // Recuperar usuario
+    // Recuperar un usuario eliminado
     public function restaurar($id)
     {
         abort_unless($this->esAdministrador(), 403);
@@ -142,7 +143,7 @@ class UsuarioController extends Controller
             ->with('success', 'Usuario recuperado correctamente.');
     }
 
-    // Eliminar permanentemente
+    // Eliminar definitivamente un usuario
     public function eliminarPermanente($id)
     {
         abort_unless($this->esAdministrador(), 403);

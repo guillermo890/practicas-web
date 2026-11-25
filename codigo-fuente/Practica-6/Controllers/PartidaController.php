@@ -93,7 +93,7 @@ public function actualizar($id)
     ) {
         abort(403, 'No tienes permiso para consultar esta partida.');
     }
-
+//Se devuelve un json por que es lo que usa JS para recargar y poder ver el movimiento del otro jugador 
     return response()->json([
         'id' => $partida->id,
         'jugador1_id' => $partida->jugador1_id,
@@ -115,7 +115,6 @@ public function actualizar($id)
 
 
 //movimientos
-
 public function movimiento(Request $request, $id)
 {
     $request->validate([
@@ -125,6 +124,7 @@ public function movimiento(Request $request, $id)
     $resultado = DB::transaction(function () use ($request, $id) {
 
         $partida = Partida::where('id', $id)
+        //evita 2 movimientos 
             ->lockForUpdate()
             ->firstOrFail();
 

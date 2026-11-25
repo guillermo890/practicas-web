@@ -16,6 +16,7 @@ class Alumno extends Model
         'user_id'
     ];
 
+    // Relaciona el registro académico con su cuenta de usuario.
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');

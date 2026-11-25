@@ -32,6 +32,7 @@
                 </div>
             @endif
 
+            <!-- Envía los cambios al método update -->
             <form action="{{ route('usuarios.update', $usuario->id) }}" method="POST">
                 @csrf
                 @method('PUT')

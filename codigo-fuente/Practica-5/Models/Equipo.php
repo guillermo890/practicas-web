@@ -17,6 +17,7 @@ class Equipo extends Model
         'estado'
     ];
 
+    // Un equipo puede tener muchas reservaciones.
     public function reservaciones(): HasMany
     {
         return $this->hasMany(Reservacion::class, 'equipo_id');

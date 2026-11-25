@@ -34,6 +34,7 @@ class CategoriaController extends Controller
     {
         $categoria = Categoria::findOrFail($id);
 
+        // Evita eliminar una categoría que todavía tiene productos.
         if ($categoria->productos()->exists()) {
             return back()->with('error', 'No puedes eliminar una categoría que tiene productos.');
         }

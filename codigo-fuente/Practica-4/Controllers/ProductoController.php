@@ -9,36 +9,32 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+    // Consulta los productos aplicando filtros, ordenamiento y paginación.
     public function index(Request $request)
     {
         $productos = Producto::with('categoria');
 
-        // Filtro por nombre
         if ($request->nombre) {
             $productos->where('nombre', 'like', '%' . $request->nombre . '%');
         }
 
-        // Filtro por categoría
         if ($request->categoria_id) {
             $productos->where('categoria_id', $request->categoria_id);
         }
 
-        // Filtro por precio mínimo
         if ($request->precio_min !== null && $request->precio_min !== '') {
             $productos->where('precio', '>=', $request->precio_min);
         }
 
-        // Filtro por precio máximo
         if ($request->precio_max !== null && $request->precio_max !== '') {
             $productos->where('precio', '<=', $request->precio_max);
         }
 
-        // Filtro por estado
         if ($request->estado) {
             $productos->where('estado', $request->estado);
         }
 
-        // Ordenamiento
+        // Selecciona el orden solicitado.
         switch ($request->orden) {
             case 'nombre_asc':
                 $productos->orderBy('nombre', 'asc');
@@ -73,7 +69,7 @@ class ProductoController extends Controller
                 break;
         }
 
-        // Paginación
+        // Limita las opciones de registros por página.
         $porPagina = $request->get('por_pagina', 10);
 
         if (!in_array((int) $porPagina, [10, 15, 25, 50])) {
@@ -98,6 +94,7 @@ class ProductoController extends Controller
         return view('practica4.productos.create', compact('categorias'));
     }
 
+    // Guarda el producto después de validar los datos.
     public function store(ProductoRequest $request)
     {
         $datos = $request->validated();
